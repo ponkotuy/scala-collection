@@ -176,3 +176,43 @@ Iterator等何度も値が取り出せない奴むけ
 Javaにもある。1度しか走査して欲しくないときに使う
 
 デザインパターンにあるIteratorパターン
+
+---
+
+## 生成方法
+### 基本
+```scala
+Seq(1, 2, 3)
+List(1, 2, 3)
+1 :: 2 :: 3 :: Nil // Listの別パターン(早い
+Map(1 -> "1", 2 -> "2")
+set.toSeq
+set.toList
+```
+
+### builderパターン
+```scala
+val builder = Seq.newBuilder[Int]
+builder += 1
+builder += 2
+builder += 3
+builder.result // => Seq(1, 2, 3)
+```
+
+---
+
+### 無限Stream
+- Streamは処理を遅延するList
+- 無限に続くStreamが作れる
+
+```scala
+val fibs = 0 #:: 1 #:: fibs.zip(fibs.tail).map { case (x, y) => x + y }
+```
+
+### 無限Iterator
+ファイル終端までファイルを読み込む例
+
+```scala
+val lines = Iterator.continually(readLine())
+  .takeWhile(_ != null)
+```
