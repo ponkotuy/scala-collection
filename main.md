@@ -216,3 +216,90 @@ val fibs = 0 #:: 1 #:: fibs.zip(fibs.tail).map { case (x, y) => x + y }
 val lines = Iterator.continually(readLine())
   .takeWhile(_ != null)
 ```
+
+---
+
+## 基本メソッド
+### map, flatMap
+事実上のループ構文
+
+```scala
+Seq(1, 2, 3).map(_ + 1) // => Seq(2, 3, 4)
+Seq(1, 2).flatMap { x => Seq(3, 4).map(_ + x) }
+// => Seq(4, 5, 5, 6)
+for {
+  x <- Seq(1, 2)
+  y <- Seq(3, 4)
+} yield x + y // => Seq(4, 5, 5, 6)
+```
+
+for式はflatMapに展開される
+
+### foreach
+返り値を持たないmapはこちら
+
+---
+
+## 高階関数の引数
+### ラムダ式
+```scala
+x => x + 1 // 基本
+_ + 1 // 時に省略可
+{ x =>
+  y = x + 1
+  y + 1
+} // 複文を纏めるのは{}
+```
+
+### 関数
+```
+def succ(x: Int): Int = x + 1
+Seq(1, 2, 3).map(succ) // => Seq(2, 3, 4)
+```
+
+---
+
+### メソッド
+```scala
+class Succ(add: Int) {
+  def apply(orig: Int): Int = orig + add
+}
+val succ = new Succ(1)
+Seq(1, 2, 3).map(succ.apply)
+Seq(1, 2, 3).map(succ(_)) // applyは()と同じ。ラムダ式
+```
+
+---
+
+## Rubyと大体おなじやつ
+- filter(select)
+- headOption(first)
+- take
+- takeWhile
+- drop, dropWhile
+- sorted(sort), sortBy
+- size
+- sum
+- count
+- max, maxBy(max)
+- reverse
+- zip
+
+---
+
+### mkString
+地味に便利なやつ
+```scala
+Seq(1, 2, 3).mkString(", ") // => "1, 2, 3"
+Seq(1, 2, 3).mkString("[", ",", "]") // => "[1,2,3]"
+```
+
+### lift
+n番目の要素をOptionで返す
+
+```
+Seq(1, 2, 3).lift(2) // => Some(3)
+```
+
+### その他
+RubyでできることはほぼScalaでできる
